@@ -5,19 +5,13 @@ task:
     cpu: 4
     memory: 16G  # Maksimal 4G per CPU
   env:
-    AOSP_BRANCH: lineage-20.0
+    AOSP_BRANCH: lineage-21.0
     DEVICE_CODENAME: a34x-ap2a
 
   script:
-    # Buat swapfile 24GB di /tmp karena /swapfile tidak punya izin tulis
-    - dd if=/dev/zero of=/tmp/swapfile bs=1M count=24576  # Buat file swap 24GB
-    - chmod 600 /tmp/swapfile  # Setel izin swapfile
-    - mkswap /tmp/swapfile  # Konfigurasi swap
-    - swapon /tmp/swapfile  # Aktifkan swap
-
     # Konfigurasi git
-    - git config --global user.name "Your Name"
-    - git config --global user.email "your_email@example.com"
+    - git config --global user.name "xnnnsets"
+    - git config --global user.email "solihinprampampam@gmail.com"
 
     # Sinkronisasi kode sumber LineageOS
     - repo init -u https://github.com/LineageOS/android.git -b $AOSP_BRANCH
@@ -32,7 +26,7 @@ task:
     # Setup build environment dan build ROM
     - source build/envsetup.sh
     - lunch lineage_$DEVICE_CODENAME-eng
-    - mka bacon
+    - mka bacon $(nproc --all)
 
   artifacts:
     paths:
