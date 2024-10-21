@@ -1,7 +1,7 @@
 task:
   name: Build LineageOS for Samsung A34x
   container:
-    image: xnnnsets/android-lineageos-build  # Ganti dengan username yang kamu buat
+    image: cirrusci/android:latest
     cpu: 4
     memory: 16G  # Sesuaikan dengan batas maksimum
 
