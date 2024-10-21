@@ -3,16 +3,16 @@ task:
   container:
     image: cirrusci/android-sdk:29
     cpu: 4
-    memory: 16G  # Masih di batas maksimal 4GB per CPU
+    memory: 16G  # Batas maksimum 4GB per CPU
   env:
     AOSP_BRANCH: lineage-20.0
     DEVICE_CODENAME: a34x-ap2a
 
   script:
-    # Setup swap file sebesar 24GB
-    - fallocate -l 24G /swapfile  # Buat swapfile 24GB
-    - chmod 600 /swapfile
-    - mkswap /swapfile
+    # Buat swapfile 24GB menggunakan dd
+    - dd if=/dev/zero of=/swapfile bs=1M count=24576  # Buat swapfile sebesar 24GB
+    - chmod 600 /swapfile  # Setel izin swapfile
+    - mkswap /swapfile  # Buat swap
     - swapon /swapfile  # Aktifkan swap
 
     # Konfigurasi git
