@@ -16,8 +16,8 @@ task:
     - swapon /swapfile  # Aktifkan swap
 
     # Konfigurasi git
-    - git config --global user.name "Your Name"
-    - git config --global user.email "your_email@example.com"
+    - git config --global user.name "xnnnsets"
+    - git config --global user.email "solihinprampampam@gmail.com"
 
     # Sinkronisasi kode sumber LineageOS
     - repo init -u https://github.com/LineageOS/android.git -b $AOSP_BRANCH
