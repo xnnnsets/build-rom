@@ -3,24 +3,37 @@ task:
   container:
     image: cirrusci/android-sdk:29
     cpu: 4
-    memory: 24G
+    memory: 16G  # Masih di batas maksimal 4GB per CPU
   env:
     AOSP_BRANCH: lineage-20.0
     DEVICE_CODENAME: a34x-ap2a
 
   script:
+    # Setup swap file sebesar 24GB
+    - fallocate -l 24G /swapfile  # Buat swapfile 24GB
+    - chmod 600 /swapfile
+    - mkswap /swapfile
+    - swapon /swapfile  # Aktifkan swap
+
+    # Konfigurasi git
     - git config --global user.name "Your Name"
     - git config --global user.email "your_email@example.com"
+
+    # Sinkronisasi kode sumber LineageOS
     - repo init -u https://github.com/LineageOS/android.git -b $AOSP_BRANCH
     - repo sync --force-sync
+
+    # Clone device tree, vendor, hardware, dan sepolicy
     - git clone https://github.com/Moonlight7728/device_samsung_a34x_aosp ./device/samsung/a34x
     - git clone https://github.com/Moonlight7728/android_vendor_samsung_a34x ./vendor/samsung/a34x
     - git clone https://github.com/xiaomi-mediatek-devs/android_hardware_mediatek ./hardware/mediatek
     - git clone https://github.com/xiaomi-mediatek-devs/android_device_mediatek_sepolicy_vndr ./device/mediatek/sepolicy_vndr
+
+    # Setup build environment dan build ROM
     - source build/envsetup.sh
     - lunch lineage_$DEVICE_CODENAME-eng
     - mka bacon
 
   artifacts:
     paths:
-      - out/target/product/$DEVICE_CODENAME/*.zip
+      - out/target/product/$DEVICE_CODENAME/*.zip  # Hasil build ROM (.zip)
